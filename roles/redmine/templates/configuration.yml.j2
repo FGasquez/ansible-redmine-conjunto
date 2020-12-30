@@ -1,0 +1,10 @@
+production:
+  email_delivery:
+    delivery_method: {{ email.delivery_method }}
+    smtp_settings:
+      address: {{ email.smtp.address }}
+      port: {{ email.smtp.port }}
+      domain: {{ email.smtp.domain }}
+      authentication: {{ email.smtp.authentication }}
+      user_name: {{ email.smtp.username }}
+      password: {{ email.smtp.password }}

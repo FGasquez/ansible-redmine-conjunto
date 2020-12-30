@@ -1,0 +1,13 @@
+development:
+  adapter: mysql2
+  database: {{ mysql.dbname }}
+  host: localhost
+  username: {{ mysql.user }}
+  password: {{ mysql.password }}
+
+production:
+  adapter: mysql2
+  database: {{ mysql.dbname }}
+  host: localhost
+  username: {{ mysql.user }}
+  password: {{ mysql.password }}

@@ -1,0 +1,82 @@
+- name: download
+  become: yes
+  get_url:
+    url: "{{ redmine.url }}/redmine-{{ redmine.version }}.zip"
+    dest: "/tmp/redmine-{{ redmine.version }}.zip"
+
+- name: Remove destination if exists
+  become: yes
+  file:
+    state: absent
+    path: "{{ common.project_dir }}/redmine-{{ redmine.version }}"
+
+- name: Extract
+  become: yes
+  shell: "unzip /tmp/redmine-{{ redmine.version }}.zip -d {{ common.project_dir }}"
+#  unarchive:
+#    src: "/tmp/redmine-{{ redmine.version }}.zip"
+#    dest: "{{ common.project_dir }}"
+
+- name: Remove old folder
+  become: yes
+  file:
+    state: absent
+    path: "{{ common.project_dir }}/redmine"
+
+- name: Rename folder
+  become: yes
+  command: "mv {{ common.project_dir }}/redmine-{{ redmine.version }} {{ common.project_dir }}/redmine"
+
+- name: Change owner to {{ common.user }}
+  become: yes
+  file:
+    dest: "{{ common.project_dir }}/redmine"
+    owner: "{{ guest.user }}"
+    recurse: yes
+
+- name: Install dependencies
+  community.general.bundler:
+    state: present
+    gemfile: "{{ common.project_dir }}/redmine/Gemfile"
+    executable: "{{ rbenv.executables_path }}/bundler"
+
+- name: Install dependencies
+  community.general.bundler:
+    state: present
+    gemfile: "{{ common.project_dir }}/redmine/Gemfile"
+    executable: "{{ rbenv.executables_path }}/bundler"
+
+- name: Install mysql2 gem
+  community.general.gem:
+    name: mysql2
+    state: latest
+    executable: "{{ rbenv.executables_path }}/gem"
+
+- name: Copy database config
+  template:
+    src: database.yml.j2
+    dest: "{{ common.project_dir }}/redmine/config/database.yml"
+    mode: 0644
+
+- name: create configuration.yml
+  become: yes
+  template:
+    src: configuration.yml.j2
+    dest: "{{ common.project_dir }}/redmine/config/configuration.yml"
+    mode: 0644
+  when: email is defined
+
+- name: Generate secret token
+  shell: "{{ rbenv.executables_path }}/rake generate_secret_token"
+  args:
+    chdir: "{{ common.project_dir }}/redmine"
+
+- name: Migrate Databases
+  shell: "{{ rbenv.executables_path }}/bundle exec rake db:migrate RAILS_ENV=production"
+  args:
+    chdir: "{{ common.project_dir }}/redmine"
+
+- name: Generate default config
+  shell: "{{ rbenv.executables_path }}/bundle exec rake redmine:load_default_data RAILS_ENV=production REDMINE_LANG=en"
+  args:
+    chdir: "{{ common.project_dir }}/redmine"

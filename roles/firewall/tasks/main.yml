@@ -1,0 +1,24 @@
+## Set the default policy of the INPUT chain to DROP
+# iptables -P INPUT DROP
+#
+## Accept incomming TCP connections from eth0 on port 80 and 443
+# iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+# iptables -A INPUT -p tcp --dport 443 -j ACCEP
+- name: Allow ports
+  become: yes
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ item }}"
+    jump: ACCEPT
+  loop:
+    - 22
+    - 80
+    - 443
+
+
+- name: Drop connections rule
+  become: yes
+  iptables:
+    chain: INPUT
+    jump: DROP

@@ -1,0 +1,58 @@
+---
+- name: Add an apt key for libnginx-mod-http-passenger
+  become: yes
+  apt_key:
+    keyserver: hkp://keyserver.ubuntu.com:80
+    id: 561F9B9CAC40B2F7
+
+- name: Add libnginx-mod-http-passenger repository
+  become: yes
+  apt_repository:
+    repo: deb https://oss-binaries.phusionpassenger.com/apt/passenger bionic main
+    state: present
+
+- name: Update apt
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: install deps
+  become: yes
+  apt:
+    name:
+      - libnginx-mod-http-passenger
+      - passenger
+      - libssl-dev
+      - mysql-server
+      - python-mysqldb
+      - dirmngr
+      - gnupg
+      - apt-transport-https
+      - ca-certificates
+      - build-essential
+      - libmysqlclient-dev
+      - imagemagick
+      - libmagickwand-dev
+      - libmagickcore-dev
+      - python3-pip
+      - nginx
+      - libreadline-dev
+      - autoconf
+      - bison 
+      - libyaml-dev
+      - libreadline6-dev
+      - zlib1g-dev 
+      - libncurses5-dev
+      - libffi-dev
+      - libgdbm5
+      - libgdbm-dev
+      - unzip
+      - libcurl4-openssl-dev
+    state: present
+
+- name: Install pymsql
+  become: yes
+  pip:
+    name: pymysql
+    state: present
+
