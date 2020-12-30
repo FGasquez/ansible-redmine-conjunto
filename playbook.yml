@@ -3,7 +3,11 @@
   hosts: all
   become: yes
   roles:
+    - mariadb
+    - rvm
     - redmine
+    - nginx
+    - iptables
 
 
         

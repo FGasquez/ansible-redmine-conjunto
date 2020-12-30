@@ -11,8 +11,8 @@ Antes de comenzar es importante activar la virtualizacion desde la BIOS (AMD-V o
 Si se quiere levantar el entorno con Vagrant se debe clonar el repositorio e ingresar a la carpeta.
 
 ```
-git clone https://github.com/manuelchichi/ansible-redmine-role
-cd ansible-redmine-role/
+git clone https://github.com/fgasquez/ansible-redmine-conjunto
+cd ansible-redmine-conjunto/
 ```
 
 Luego para instalar el sistema propuesto se debe contar con los siguientes paquetes:
