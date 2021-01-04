@@ -1,7 +1,6 @@
 ---
-- name: Provision servers
+- name: Provision redmine to hosts
   hosts: all
-  become: yes
   roles:
     - mariadb
     - rvm

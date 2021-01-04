@@ -1,6 +1,6 @@
 # Ansible Redmine Role + Molecule Testing + Vagrant
 
-Se ha construido un rol de Ansible que se encarga de instalar MariaDB (motor de base de datos), Nginx (servidor web HTTP), Puma (servidor de aplicacion Ruby) y finalmente instala Redmine (sistemas gestor de Tickets). Para utilizar este rol se ha planteado utilizar Vagrant para crear el entorno de desarrollo con VBox como driver. De esta forma, el entorno es aprovisionado con el playbook que implementa el rol descrito. Para las pruebas se utiliza Molecule, el cual se encarga de crear con Vagrant las maquinas virtuales donde se ejecutara el playbook y luego se hace una pequeña comprobacion de los servicios con TestInfra. Las pruebas realizadas se hacen con Ubuntu 20.04 y Ubuntu 18.04.
+Se ha construido un rol de Ansible que se encarga de instalar MariaDB (motor de base de datos), Nginx (servidor web HTTP), Puma (servidor de aplicacion Ruby) y finalmente instala Redmine (sistemas gestor de Tickets). Para realizar esta instalacion se ha propuesto la creacion de multiples roles y luego utilizar Vagrant para crear el entorno con VBox como driver. De esta forma, el entorno es aprovisionado con el playbook que implementa los roles descritos. Para las pruebas se utiliza Molecule, el cual se encarga de crear con Vagrant las maquinas virtuales donde se ejecutara el playbook y luego se hace una pequeña comprobacion de los servicios con TestInfra. Las pruebas realizadas se hacen con Ubuntu 20.04 y Ubuntu 18.04.
 
 ## Instalacion y guia de uso
 
@@ -106,5 +106,5 @@ Se han agregado una serie de variables de entorno para personalizar la instalaci
 - [X] Agregar mas variables al rol Redmine.
 - [ ] Mejorar la instalacion de RVM y la forma de invocarlo.
 - [ ] Mejorar pruebas con constantes fijas (puerto) en el test_redmine.py .
-- [ ] Analizar la posibilidad de separar en roles.
+- [X] Analizar la posibilidad de separar en roles.
 
