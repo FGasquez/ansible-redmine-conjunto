@@ -1,8 +1,10 @@
 ---
 - name: Provision redmine to hosts
   hosts: all
+  vars:
+    run_mariadb: true
   roles:
-    - mariadb
+    - { role: mariadb, when: run_mariadb == true }
     - rvm
     - redmine
     - nginx
