@@ -1,52 +1,73 @@
-- name: Mysql start
-  service:
-    name: mysql
-    state: started
-    enabled: yes
-
-- name: Verify if root is configured
-  shell: "mysqladmin -uroot -p{{ mysql.root_password }} ping"
-  register: root_status
-
-- name: Change the authentication plugin of MySQL root user to mysql_native_password
+---
+# tasks file for installing mariadb
+- name: install required packages for mariadb
   become: yes
-  shell: mysql -u root -e 'UPDATE mysql.user SET plugin="mysql_native_password"
-    WHERE user="root" AND host="localhost"'
-  when: root_status.stdout|length == 0
+  apt:
+    name: software-properties-common, mariadb-server, mariadb-client, python3-pip
+    update_cache: yes
 
-- name: Flush Privileges
+- name: Install pymysql
   become: yes
-  shell: mysql -u root -e 'FLUSH PRIVILEGES'
-  when: root_status.stdout|length == 0
-
-- name: Set MySQL root Password
-  mysql_user:
-    login_host: localhost
-    login_user: root
-    login_password: ""
-    name: root
-    password: "{{ mysql.root_password }}"
+  pip:
+    name: pymysql
     state: present
-  when: root_status.stdout|length == 0
 
-- name: Restart mysql service
+- name: update MariaDB root password
   become: yes
-  service:
-    name: mysql
-    state: restarted
-  when: root_status.stdout|length == 0
+  community.mysql.mysql_user: 
+    login_user: root
+    login_password: ''
+    login_host: 127.0.0.1
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: root 
+    host: localhost 
+    password: "{{mariadb_root_password}}"
 
-- name: Create database
-  mysql_db:
-    name: "{{ mysql.dbname }}"
+- name: set .my.cnf file
+  become: yes
+  template: 
+    src: my.cnf.j2 
+    dest: /root/.my.cnf 
+    mode: 0600
+ 
+- name: delete anonymous Database user
+  become: yes
+  community.mysql.mysql_user: 
+    name: "" 
+    host: 127.0.0.1 
+    state: absent
+    
+- name: delete Hostname based Database user
+  become: yes
+  community.mysql.mysql_user: 
+    name: root 
+    host: "{{ansible_nodename}}" 
+    state: absent
+
+- name: remove Database test database
+  become: yes
+  community.mysql.mysql_db: 
+    name: test 
+    state: absent
+    
+- name: create database with name 'redmine'
+  become: yes
+  community.mysql.mysql_db:
+    name: redmine
     encoding: utf8
-    login_user: root
-    login_password: "{{ mysql.root_password }}"
+    state: present
 
-- name: Create user for redmine
-  mysql_user:
-    name: "{{ mysql.user }}"
-    password: "{{ mysql.password }}"
-    login_user: root
-    login_password: "{{ mysql.root_password }}"
-    priv: "{{ mysql.dbname }}.*:ALL"
+- name: create user for redmine db
+  become: yes
+  community.mysql.mysql_user:
+    name: redmine
+    password: "{{redmine_user_password}}"
+    priv: 'redmine.*:ALL'
+    state: present
+    
+- name: enable mariadb
+  become: yes
+  systemd:
+    state: started
+    name: mariadb
+    enabled: yes

@@ -1,0 +1,6 @@
+---
+# vars file for mariadb
+redmine_user_password: Iremember400
+mariadb_root_password: Idontremember150
+
+
