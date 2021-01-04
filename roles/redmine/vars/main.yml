@@ -1,0 +1,13 @@
+- redmine_url: https://www.redmine.org/releases/
+  redmine_version: 4.1.1
+  redmine_project_dir: /usr/local/share/redmine
+
+  redmine_email:
+    delivery_method: :smtp
+    smtp:
+      address: smtp.example.net
+      port: 25
+      domain: example.com
+      authentication: :login
+      username: admin@example.com
+      password: redmine
