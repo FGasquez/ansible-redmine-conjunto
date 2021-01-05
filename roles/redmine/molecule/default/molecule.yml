@@ -1,0 +1,24 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: VBox
+platforms:
+  - name: bionicInstance
+    box: ubuntu/bionic64
+    interfaces:
+      - network_name: forwarded_port
+        guest: 80
+        host: 8083
+#  - name: focalInstance
+#    box: ubuntu/focal64
+#    interfaces:
+#      - network_name: forwarded_port
+#        guest: 80
+#        host: 8084
+provisioner:
+  name: ansible
+verifier:
+  name: testinfra
