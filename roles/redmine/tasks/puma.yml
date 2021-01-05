@@ -16,7 +16,7 @@
     state: directory
     owner: "{{ rvm_user }}"
     group: redmine
-    mode: 0744
+    mode: 0755
   loop:
     - sockets
     - pids
