@@ -1,32 +1,32 @@
 ---
 # tasks file for rvm
-- name: install required packages to install RVM
+- name: Install required packages to install RVM
   become: yes
   apt:
     name: curl, gnupg2, g++, gcc, autoconf, automake, bison, libc6-dev, libffi-dev, libgdbm-dev, libncurses5-dev, libsqlite3-dev, libtool, libyaml-dev, make, pkg-config, sqlite3, zlib1g-dev, libgmp-dev, libreadline-dev, libssl-dev, acl
     update_cache: yes
 
-- name: create user who will use rvm
+- name: Create user who will use rvm
   become: yes
   user:
     name: "{{ rvm_user }}"
     shell: /bin/bash
 
-- name: install gpg2 keys
+- name: Install gpg2 keys
   become: yes
   become_user: "{{ rvm_user }}"
   command: "gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB"
   args:
     creates: /home/{{ rvm_user }}/.gnupg/pubring.kbx
 
-- name: install rvm
+- name: Install rvm
   become: yes
   become_user: "{{ rvm_user }}"
   shell: "curl -L https://get.rvm.io | bash -s stable"
   args:
     creates: /home/{{ rvm_user }}/.rvm
 
-- name: ensure that ruby is installed
+- name: Ensure that ruby is installed
   become: yes
   become_user: "{{ rvm_user }}"
   command: "rvm install {{ rvm_ruby_version }}"
@@ -35,7 +35,7 @@
   environment:
     PATH: "{{ rvm_path }}:{{ ansible_env.PATH }}"
 
-- name: set default version of ruby with rvm
+- name: Set default version of ruby with rvm
   become: yes
   become_user: "{{ rvm_user }}"
   command: "rvm alias create default ruby-{{ rvm_ruby_version }}"
@@ -44,7 +44,7 @@
   environment:
     PATH: "{{ rvm_path }}:{{ ansible_env.PATH }}"
 
-- name: install bundler
+- name: Install bundler
   become: yes
   become_user: "{{ rvm_user }}"
   community.general.gem:

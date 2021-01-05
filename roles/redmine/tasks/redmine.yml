@@ -27,7 +27,7 @@
   become: yes
   command: mv "{{ redmine_project_dir }}/redmine-{{ redmine_version }}" "{{ redmine_project_dir }}/redmine"
 
-- name: Change owner to {{ rvm_user }}
+- name: Change owner to "{{ rvm_user }}"
   become: yes
   file:
     dest: "{{ redmine_project_dir }}/redmine"
@@ -35,7 +35,7 @@
     group: redmine
     recurse: yes
 
-- name: install bundler
+- name: Install bundler
   community.general.gem:
     name: bundler
     state: present
@@ -69,7 +69,7 @@
     dest: "{{ redmine_project_dir }}/redmine/config/database.yml"
     mode: 0644
 
-- name: create configuration.yml
+- name: Create configuration.yml
   remote_user: "{{ rvm_user }}"
   become: yes
   template:
