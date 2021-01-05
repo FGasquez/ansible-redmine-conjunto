@@ -1,13 +1,13 @@
 development:
   adapter: mysql2
-  database: {{ mysql.dbname }}
+  database: {{ mariadb_dbname }}
   host: localhost
-  username: {{ mysql.user }}
-  password: {{ mysql.password }}
+  username: {{ mariadb_user }}
+  password: {{ mariadb_password }}
 
 production:
   adapter: mysql2
-  database: {{ mysql.dbname }}
+  database: {{ mariadb_dbname }}
   host: localhost
-  username: {{ mysql.user }}
-  password: {{ mysql.password }}
+  username: {{ mariadb_user }}
+  password: {{ mariadb_password }}

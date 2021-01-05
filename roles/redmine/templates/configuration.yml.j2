@@ -1,10 +1,10 @@
 production:
   email_delivery:
-    delivery_method: {{ email.delivery_method }}
+    delivery_method: {{ redmine_email.delivery_method }}
     smtp_settings:
-      address: {{ email.smtp.address }}
-      port: {{ email.smtp.port }}
-      domain: {{ email.smtp.domain }}
-      authentication: {{ email.smtp.authentication }}
-      user_name: {{ email.smtp.username }}
-      password: {{ email.smtp.password }}
+      address: {{ redmine_email.smtp.address }}
+      port: {{ redmine_email.smtp.port }}
+      domain: {{ redmine_email.smtp.domain }}
+      authentication: {{ redmine_email.smtp.authentication }}
+      user_name: {{ redmine_email.smtp.username }}
+      password: {{ redmine_email.smtp.password }}
