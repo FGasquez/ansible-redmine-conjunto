@@ -1,4 +1,4 @@
-- name: install nginx
+- name: Install nginx
   become: yes
   apt:
     name: nginx
