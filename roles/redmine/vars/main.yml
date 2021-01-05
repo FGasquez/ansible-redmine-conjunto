@@ -1,6 +1,6 @@
 - redmine_url: https://www.redmine.org/releases/
   redmine_version: 4.1.1
-  redmine_project_dir: /usr/local/share/redmine
+  redmine_project_dir: /var/www/redmine
 
   redmine_email:
     delivery_method: :smtp
