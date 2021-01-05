@@ -16,7 +16,7 @@
     state: directory
     owner: "{{ rvm_user }}"
     group: redmine
-    mode: 0644
+    mode: 0744
   loop:
     - sockets
     - pids
@@ -37,15 +37,6 @@
     src: puma.rb.j2
     dest: "{{ redmine_project_dir }}/redmine/config/puma.rb"
     mode: 0644
-
-- name: Generate socket file
-  remote_user: "{{ rvm_user }}"
-  become: yes
-  shell: "RACK_ENV=production bundle exec puma -C config/puma.rb"
-  args:
-    chdir: "{{ redmine_project_dir }}/redmine"
-  environment:
-    PATH: "{{ rvm_path }}:{{ ansible_env.PATH }}"
 
 - name: Enable puma
   become: yes
