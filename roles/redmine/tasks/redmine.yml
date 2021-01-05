@@ -45,21 +45,16 @@
 - name: Install dependencies
   remote_user: "{{ rvm_user }}"
   become: yes
-  community.general.bundler:
-    state: present
-    gemfile: "{{ redmine_project_dir }}/redmine/Gemfile"
-    # executable: "/home/{{ rvm_user }}/.rvm/gems/ruby-{{ rvm_ruby_version }}/wrappers/gem"
-  environment:
-    PATH: "{{ rvm_path }}:{{ ansible_env.PATH }}"
+  shell: "/home/{{ rvm_user }}/.rvm/bin/rvm-exec 2.6.6 bundle install "
+  args:
+    chdir: "{{ redmine_project_dir }}/redmine"
 
 - name: Install mysql2 gem
   remote_user: "{{ rvm_user }}"
   become: yes
-  community.general.gem:
-    name: mysql2
-    state: latest
-  environment:
-    PATH: "{{ rvm_path }}:{{ ansible_env.PATH }}"
+  shell: "/home/{{ rvm_user }}/.rvm/bin/rvm-exec 2.6.6 gem install mysql2"
+  args:
+    chdir: "{{ redmine_project_dir }}/redmine"
 
 - name: Copy database config
   remote_user: "{{ rvm_user }}"
