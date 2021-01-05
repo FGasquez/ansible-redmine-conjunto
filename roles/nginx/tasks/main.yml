@@ -1,3 +1,9 @@
+- name: install nginx
+  become: yes
+  apt:
+    name: nginx
+    state: present  
+
 - name: Disable default site
   become: yes
   file:
@@ -8,14 +14,14 @@
   become: yes
   template:
     src: host.conf.j2
-    dest: "/etc/nginx/sites-available/{{ common.url }}.conf"
+    dest: "/etc/nginx/sites-available/{{ nginx_servername }}.conf"
     mode: 0644
 
 - name: Create symbolic link
   become: yes
   file:
-    src: "/etc/nginx/sites-available/{{ common.url }}.conf"
-    dest: "/etc/nginx/sites-enabled/{{ common.url }}.conf"
+    src: "/etc/nginx/sites-available/{{ nginx_servername }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ nginx_servername }}.conf"
     state: link
 
 - name: Restart
@@ -24,3 +30,11 @@
     name: nginx
     state: restarted
     enabled: yes
+
+- name: Add the user www-data to redmine group
+  become: yes
+  user:
+    name: www-data
+    shell: /bin/bash
+    groups: redmine
+    append: yes

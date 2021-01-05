@@ -1,10 +1,14 @@
 
+
+upstream app {
+        server unix:///{{ redmine_project_dir }}/redmine/sockets/puma.sock;
+}
+
 server {
     listen 80;
-    server_name "{{ common.url | default('localhost') }}";
-    passenger_ruby /home/vagrant/.rbenv/shims/ruby;
+    server_name "{{ nginx_servername | default('localhost') }}";
 
-    root "{{ common.project_dir }}/redmine/public";
+    root "{{ redmine_project_dir }}/redmine/public";
     # serve static (compiled) assets directly if they exist (for rails production)
     location ~ ^/(assets|images|javascripts|stylesheets|swfs|system)/   {
       try_files $uri @rails;
@@ -27,6 +31,5 @@ server {
     access_log /var/log/nginx/production.access.log;
     error_log /var/log/nginx/production.error.log;
     
-    passenger_enabled on;
     client_max_body_size 10m;
 }
