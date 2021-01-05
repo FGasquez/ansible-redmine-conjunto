@@ -1,13 +1,15 @@
 development:
   adapter: mysql2
-  database: {{ mariadb_dbname }}
+  database: {{ mariadb_dbname|default("redmine", true) }}
   host: localhost
-  username: {{ mariadb_user }}
-  password: {{ mariadb_password }}
+  username: {{ mariadb_user|default("redmine", true) }}
+  password: {{ mariadb_redmine_password }}
+  socket: /var/run/mysqld/mysqld.sock
 
 production:
   adapter: mysql2
-  database: {{ mariadb_dbname }}
+  database: {{ mariadb_dbname|default("redmine", true) }}
   host: localhost
-  username: {{ mariadb_user }}
-  password: {{ mariadb_password }}
+  username: {{ mariadb_user|default("redmine", true) }}
+  password: {{ mariadb_redmine_password }}
+  socket: /var/run/mysqld/mysqld.sock

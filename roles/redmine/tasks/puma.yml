@@ -1,0 +1,32 @@
+---
+# tasks file for puma
+- name: Create socket and pid directories
+  remote_user: "{{rvm_user}}"
+  become: yes
+  file:
+    path: "{{ redmine_project_dir }}/redmine/{{ item }}"
+    state: directory
+  loop:
+    - socket
+    - pid
+
+- name: Set service file
+  become: yes
+  template: 
+    src: puma.service.j2
+    dest: /etc/systemd/system/puma.service
+    force: yes
+    owner: "{{ rvm_user }}"
+    mode: 0644
+
+- name: Enable puma
+  become: yes
+  service:
+    name: puma
+    enabled: yes
+
+- name: Restart puma
+  become: yes
+  service:
+    name: puma
+    state: restarted
