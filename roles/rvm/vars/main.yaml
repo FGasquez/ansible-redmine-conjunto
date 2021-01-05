@@ -1,5 +1,5 @@
 ---
 # vars file for rvm
-rvm_ruby_user: redmine
+rvm_user: redmine
 rvm_ruby_version: 2.6.6
-rvm_path: "/home/{{ rvm_ruby_user }}/.rvm/gems/ruby-{{ rvm_ruby_version }}/bin:/home/{{ rvm_ruby_user }}/.rvm/gems/ruby-{{ rvm_ruby_version }}@global/bin:/home/{{ rvm_ruby_user }}/.rvm/rubies/ruby-{{ rvm_ruby_version }}/bin:/home/{{ rvm_ruby_user }}/.rvm/bin"
+rvm_path: "/home/{{ rvm_user }}/.rvm/gems/ruby-{{ rvm_ruby_version }}/bin:/home/{{ rvm_user }}/.rvm/gems/ruby-{{ rvm_ruby_version }}@global/bin:/home/{{ rvm_user }}/.rvm/rubies/ruby-{{ rvm_ruby_version }}/bin:/home/{{ rvm_user }}/.rvm/bin"

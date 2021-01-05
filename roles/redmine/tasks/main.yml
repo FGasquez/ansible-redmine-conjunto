@@ -23,7 +23,7 @@
   file:
     dest: "{{ redmine_project_dir }}"
     owner: "{{ rvm_user }}"
-    group: "{{ rvm_group }}"
+    group: "{{ rvm_user }}"
     recurse: yes
 
 - name: Install dependencies

@@ -9,44 +9,44 @@
 - name: create user who will use rvm
   become: yes
   user:
-    name: "{{ rvm_ruby_user }}"
+    name: "{{ rvm_user }}"
     shell: /bin/bash
 
 - name: install gpg2 keys
   become: yes
-  become_user: "{{ rvm_ruby_user }}"
+  become_user: "{{ rvm_user }}"
   command: "gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB"
   args:
-    creates: /home/{{ rvm_ruby_user }}/.gnupg/pubring.kbx
+    creates: /home/{{ rvm_user }}/.gnupg/pubring.kbx
 
 - name: install rvm
   become: yes
-  become_user: "{{ rvm_ruby_user }}"
+  become_user: "{{ rvm_user }}"
   shell: "curl -L https://get.rvm.io | bash -s stable"
   args:
-    creates: /home/{{ rvm_ruby_user }}/.rvm
+    creates: /home/{{ rvm_user }}/.rvm
 
 - name: ensure that ruby is installed
   become: yes
-  become_user: "{{ rvm_ruby_user }}"
+  become_user: "{{ rvm_user }}"
   command: "rvm install {{ rvm_ruby_version }}"
   args:
-    creates: "/home/{{ rvm_ruby_user }}/.rvm/gems/ruby-{{ rvm_ruby_version }}"
+    creates: "/home/{{ rvm_user }}/.rvm/gems/ruby-{{ rvm_ruby_version }}"
   environment:
     PATH: "{{ rvm_path }}:{{ ansible_env.PATH }}"
 
 - name: set default version of ruby with rvm
   become: yes
-  become_user: "{{ rvm_ruby_user }}"
+  become_user: "{{ rvm_user }}"
   command: "rvm alias create default ruby-{{ rvm_ruby_version }}"
   args:
-    creates: /home/{{ rvm_ruby_user }}/.rvm/config/alias
+    creates: /home/{{ rvm_user }}/.rvm/config/alias
   environment:
     PATH: "{{ rvm_path }}:{{ ansible_env.PATH }}"
 
 - name: install bundler
   become: yes
-  become_user: "{{ rvm_ruby_user }}"
+  become_user: "{{ rvm_user }}"
   community.general.gem:
     name: bundler
     state: present
