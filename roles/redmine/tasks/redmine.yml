@@ -32,6 +32,7 @@
   file:
     dest: "{{ redmine_project_dir }}/redmine"
     owner: "{{ rvm_user }}"
+    group: redmine
     recurse: yes
 
 - name: install bundler

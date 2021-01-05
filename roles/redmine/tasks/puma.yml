@@ -1,5 +1,13 @@
 ---
 # tasks file for puma
+
+- name: install puma
+  community.general.gem:
+    name: puma
+    state: present
+  environment:
+    PATH: "{{ rvm_path }}:{{ ansible_env.PATH }}"
+
 - name: Create socket and pid directories
   remote_user: "{{rvm_user}}"
   become: yes
@@ -7,8 +15,8 @@
     path: "{{ redmine_project_dir }}/redmine/{{ item }}"
     state: directory
   loop:
-    - socket
-    - pid
+    - sockets
+    - pids
 
 - name: Set service file
   become: yes
@@ -17,6 +25,14 @@
     dest: /etc/systemd/system/puma.service
     force: yes
     owner: "{{ rvm_user }}"
+    mode: 0644
+
+- name: Set service file
+  remote_user: "{{ rvm_user }}"
+  become: yes
+  template: 
+    src: puma.rb.j2
+    dest: "{{ redmine_project_dir }}/redmine/config/puma.rb"
     mode: 0644
 
 - name: Enable puma
