@@ -61,7 +61,7 @@
   become: yes
   community.mysql.mysql_user:
     name: redmine
-    password: "{{redmine_user_password}}"
+    password: "{{mariadb_redmine_password}}"
     priv: 'redmine.*:ALL'
     state: present
     
