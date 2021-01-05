@@ -60,20 +60,20 @@
 - name: Generate secret token
   remote_user: "{{ rvm_user }}"
   become: yes
-  shell: "{{ rbenv.executables_path }}/rake generate_secret_token"
+  shell: "rake generate_secret_token"
   args:
     chdir: "{{ redmine_project_dir }}"
 
 - name: Migrate Databases
   remote_user: "{{ rvm_user }}"
   become: yes
-  shell: "{{ rbenv.executables_path }}/bundle exec rake db:migrate RAILS_ENV=production"
+  shell: "bundle exec rake db:migrate RAILS_ENV=production"
   args:
     chdir: "{{ redmine_project_dir }}"
 
 - name: Generate default config
   remote_user: "{{ rvm_user }}"
   become: yes
-  shell: "{{ rbenv.executables_path }}/bundle exec rake redmine:load_default_data RAILS_ENV=production REDMINE_LANG=en"
+  shell: "bundle exec rake redmine:load_default_data RAILS_ENV=production REDMINE_LANG=en"
   args:
     chdir: "{{ redmine_project_dir }}"
