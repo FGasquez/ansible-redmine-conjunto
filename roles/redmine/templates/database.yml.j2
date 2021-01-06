@@ -1,7 +1,7 @@
 development:
   adapter: mysql2
   database: {{ mariadb_dbname|default("redmine", true) }}
-  host: localhost
+  host: {{ mariadb_host|default("localhost", true) }}
   username: {{ mariadb_user|default("redmine", true) }}
   password: {{ mariadb_redmine_password }}
   socket: /var/run/mysqld/mysqld.sock
@@ -9,7 +9,7 @@ development:
 production:
   adapter: mysql2
   database: {{ mariadb_dbname|default("redmine", true) }}
-  host: localhost
+  host: {{ mariadb_host|default("localhost", true) }}
   username: {{ mariadb_user|default("redmine", true) }}
   password: {{ mariadb_redmine_password }}
   socket: /var/run/mysqld/mysqld.sock
