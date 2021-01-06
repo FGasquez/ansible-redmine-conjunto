@@ -30,6 +30,7 @@
     force: yes
     owner: "{{ rvm_user }}"
     mode: 0644
+  notify: Restart puma
 
 - name: Set service file
   remote_user: "{{ rvm_user }}"
@@ -38,15 +39,6 @@
     src: puma.rb.j2
     dest: "{{ redmine_project_dir }}/redmine/config/puma.rb"
     mode: 0644
+  notify: Restart puma
 
-- name: Enable puma
-  become: yes
-  service:
-    name: puma
-    enabled: yes
 
-- name: Restart puma
-  become: yes
-  service:
-    name: puma
-    state: restarted

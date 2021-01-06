@@ -1,0 +1,8 @@
+---
+#handler file for redmine role
+- name: Restart puma
+  become: yes
+  service:
+    name: puma
+    state: restarted
+    enabled: yes

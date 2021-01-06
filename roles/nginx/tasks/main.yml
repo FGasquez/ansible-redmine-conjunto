@@ -23,20 +23,14 @@
     src: "/etc/nginx/sites-available/{{ nginx_servername }}.conf"
     dest: "/etc/nginx/sites-enabled/{{ nginx_servername }}.conf"
     state: link
+  notify: Restart nginx
 
-- name: Add the user www-data to rvm_user group
+- name: Add the user www-data to {{ rvm_user }} group
   become: yes
   user:
     name: www-data
     shell: /bin/bash
     groups: "{{ rvm_user }}"
     append: yes
-
-- name: Restart
-  become: yes
-  service:
-    name: nginx
-    state: restarted
-    enabled: yes
 
 
