@@ -1,3 +1,20 @@
 ---
-- include_tasks: redmine.yml
+- name: Check if {{ redmine_project_dir }}/redmine exists.
+  stat:
+    path: "{{ redmine_project_dir }}/redmine"
+  register: folder_details
+
+- name: Check if puma socket exists.
+  become: yes
+  stat:
+    path: "{{ redmine_project_dir }}/redmine/sockets/puma.sock"
+  register: socket_details
+
+- include_tasks: redmine_base.yml
+  when: not folder_details.stat.exists
+
+- include_tasks: redmine_deps.yml
+  when: not socket_details.stat.exists
+
 - include_tasks: puma.yml
+  when: not socket_details.stat.exists

@@ -1,0 +1,36 @@
+---
+- name: Install unzip
+  become: yes
+  apt:
+    name: 
+      - unzip
+      - libmariadb-dev
+    state: present
+
+- name: Download
+  become: yes
+  get_url:
+    url: "{{ redmine_url }}/redmine-{{ redmine_version }}.zip"
+    dest: "/tmp/redmine-{{ redmine_version }}.zip"
+
+- name: Remove destination if exists
+  become: yes
+  file:
+    state: absent
+    path: "{{ redmine_project_dir }}/redmine"
+
+- name: Extract
+  become: yes
+  shell: "unzip /tmp/redmine-{{ redmine_version }}.zip -d {{ redmine_project_dir }}"
+
+- name: Rename folder
+  become: yes
+  command: mv "{{ redmine_project_dir }}/redmine-{{ redmine_version }}" "{{ redmine_project_dir }}/redmine"
+
+- name: Change owner to "{{ rvm_user }}"
+  become: yes
+  file:
+    dest: "{{ redmine_project_dir }}/redmine"
+    owner: "{{ rvm_user }}"
+    group: redmine
+    recurse: yes
