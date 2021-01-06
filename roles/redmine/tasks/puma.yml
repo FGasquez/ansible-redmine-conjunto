@@ -1,13 +1,14 @@
 ---
 # tasks file for puma
-
-- name: install puma
-  community.general.gem:
-    name: puma
-    state: present
+- name: Install puma gem
+  become_user: "{{ rvm_user }}"
+  become: yes
+  shell: "rvm-exec {{ rvm_ruby_version }} gem install puma"
+  args:
+    chdir: "{{ redmine_project_dir }}/redmine"
   environment:
     PATH: "{{ rvm_path }}:{{ ansible_env.PATH }}"
-
+    
 - name: Create socket and pid directories
   remote_user: "{{ rvm_user }}"
   become: yes
