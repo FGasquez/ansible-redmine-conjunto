@@ -12,12 +12,19 @@
     name: "{{ rvm_user }}"
     shell: /bin/bash
 
-- name: Install gpg2 keys
+- name: Install gpg2 key
   become: yes
   become_user: "{{ rvm_user }}"
-  command: "gpg2 --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB"
-  args:
-    creates: /home/{{ rvm_user }}/.gnupg/pubring.kbx
+  block:
+    - name: Add gpg2 key with server 1
+      command: "gpg2 --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB"
+      args:
+        creates: /home/{{ rvm_user }}/.gnupg/pubring.kbx
+  rescue:
+    - name: Add gpg2 key with server 2
+      command: "gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB"
+      args:
+        creates: /home/{{ rvm_user }}/.gnupg/pubring.kbx
 
 - name: Install rvm
   become: yes
