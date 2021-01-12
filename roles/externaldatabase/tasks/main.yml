@@ -11,17 +11,13 @@
   pip:
     name: pymysql
     state: present
-
-- name: Set .my.cnf file
-  become: yes
-  template: 
-    src: my.cnf.j2 
-    dest: /root/.my.cnf 
-    mode: 0600
     
 - name: Create database with name 'redmine'
   become: yes
   community.mysql.mysql_db:
+    login_host: "{{ mariadb_host }}"
+    login_user: root
+    login_password: "{{ mariadb_root_password }}"
     name: redmine
     encoding: utf8
     state: present
@@ -29,8 +25,11 @@
 - name: Create user for redmine db
   become: yes
   community.mysql.mysql_user:
+    login_host: "{{ mariadb_host }}"
+    login_user: root
+    login_password: "{{ mariadb_root_password }}"
     name: redmine
-    password: "{{mariadb_redmine_password}}"
+    password: "{{ mariadb_redmine_password }}"
     priv: 'redmine.*:ALL'
     state: present
     

@@ -10,7 +10,7 @@
     PATH: "{{ rvm_path }}:{{ ansible_env.PATH }}"
     
 - name: Create socket and pid directories
-  remote_user: "{{ rvm_user }}"
+  become_user: "{{ rvm_user }}"
   become: yes
   file:
     path: "{{ redmine_project_dir }}/redmine/{{ item }}"
@@ -33,7 +33,7 @@
   notify: Restart puma
 
 - name: Set service file
-  remote_user: "{{ rvm_user }}"
+  become_user: "{{ rvm_user }}"
   become: yes
   template: 
     src: puma.rb.j2

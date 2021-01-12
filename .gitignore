@@ -1,4 +1,25 @@
-.vagrant/
+#Python env and Pycaches
+
 __pycache__/
 env/
-terraform/conjunto.pem
+
+# Compiled files
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+
+# Directories
+.terraform/
+.vagrant/
+
+# SSH Keys
+*.pem
+
+# Backup files
+*.bak
+
+# Ignored Terraform files
+*gitignore*.tf
+
+# Ignore Mac .DS_Store files
+.DS_Store

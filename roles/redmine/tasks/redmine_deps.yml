@@ -28,7 +28,7 @@
     PATH: "{{ rvm_path }}:{{ ansible_env.PATH }}"
     
 - name: Copy database config
-  remote_user: "{{ rvm_user }}"
+  become_user: "{{ rvm_user }}"
   become: yes
   template:
     src: database.yml.j2
@@ -36,7 +36,7 @@
     mode: 0644
 
 - name: Create configuration.yml
-  remote_user: "{{ rvm_user }}"
+  become_user: "{{ rvm_user }}"
   become: yes
   template:
     src: configuration.yml.j2
