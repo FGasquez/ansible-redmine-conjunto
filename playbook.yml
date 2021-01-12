@@ -5,6 +5,7 @@
     run_mariadb: true
   roles:
     - { role: mariadb, when: run_mariadb == true }
+    - { role: externaldatabase, when: run_mariadb == false }
     - rvm
     - redmine
     - nginx
