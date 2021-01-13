@@ -76,7 +76,7 @@ resource "aws_instance" "redmine-app" {
       "mkfs -t ext4 /dev/xvdh",
       "mkdir /backups",
       "mount /dev/xvdh /backups/",
-      "echo "/dev/xvdh /backups ext4 defaults,nofail 0 0" >> /etc/fstab"
+      "echo \"/dev/xvdh /backups ext4 defaults,nofail 0 0\" >> /etc/fstab"
     ]
   
   }
