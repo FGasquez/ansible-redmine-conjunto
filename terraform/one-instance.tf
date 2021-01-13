@@ -31,7 +31,19 @@ variable "redmine_user_password" {
   type    = string
   default = "ChangeMe12345"
 }
+variable "backup_retention_period" {
+  type    = number
+  default = 30
+}
+variable "backup_window" {
+  type    = string
+  default = "00:01-23:30"
+}
 
+variable "maintenance_window" {
+  type    = string
+  default = "Mon:23:31-Tue:00:01"
+}
 resource "aws_db_instance" "redmine-db" {
   count = var.use_rds == "true" ? 1 : 0
   
@@ -43,6 +55,9 @@ resource "aws_db_instance" "redmine-db" {
   username             = "root"
   password             = var.root_user_password
   parameter_group_name = "default.mysql5.7"
+  maintenance_window   = var.maintenance_window
+  backup_window        = var.backup_window
+  backup_retention_period = var.backup_retention_period
 }
 
 resource "aws_instance" "redmine-app" {
