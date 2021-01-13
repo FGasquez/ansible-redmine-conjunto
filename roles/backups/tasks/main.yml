@@ -1,0 +1,18 @@
+---
+- name: Install
+  become: yes
+  apt:
+    name:
+      - rdiff-backup
+    state: present
+
+# 0 */6 * * * rdiff-backup /var/www/redmine/files /backups/redmine >/dev/null 2>&1
+- name: Add backups cron job
+  become: yes
+  ansible.builtin.cron:
+    name: "backup files"
+    minute: "0"
+    hour: "*/6"
+    user: root
+    job: "rdiff-backup {{ redmine_project_dir }}/redmine/files /backups/redmine >/dev/null 2>&1"
+    cron_file: ansible_rdiff-backup
