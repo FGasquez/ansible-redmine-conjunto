@@ -26,6 +26,7 @@
     - 53
     - 80
     - 443
+    - 3306
      
 - name: allow source DNS (UDP)
   become: yes
@@ -48,4 +49,4 @@
   become: yes
   iptables:
     chain: INPUT
-    jump: DROP
+    policy: DROP

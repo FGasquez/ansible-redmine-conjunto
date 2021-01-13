@@ -1,7 +1,6 @@
 redmine_url: https://www.redmine.org/releases/
 redmine_version: 4.1.1
 redmine_project_dir: /var/www
-redmine_pids_path: "{{ redmine_project_dir }}/pid"
 
 redmine_email:
   delivery_method: :smtp
