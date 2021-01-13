@@ -10,6 +10,7 @@
     - redmine
     - nginx
     - iptables
+    - backups
 
 
         
