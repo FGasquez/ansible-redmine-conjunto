@@ -1,10 +1,10 @@
 ---
-- name: Provision redmine to hosts
+- name: Change database host
   hosts: all
   vars:
     database_host: ""
   tasks:
-  - name: Change host in database
+  - name: Change host in database file
     become: yes
     lineinfile: 
       path: /var/www/redmine/config/database.yml
