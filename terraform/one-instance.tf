@@ -65,6 +65,23 @@ resource "aws_volume_attachment" "backup-volume-attachment" {
   device_name = "/dev/sdh"
   instance_id = aws_instance.redmine-app.id
   volume_id   = aws_ebs_volume.backup-volume.id
+  
+  connection {
+    type = "ssh"
+    user        = "ubuntu"
+    private_key = file("./conjunto.pem")
+    host = aws_instance.redmine-app.public_ip
+  } 
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mkfs -t ext4 /dev/xvdh",
+      "sudo mkdir /backups",
+      "sudo mount /dev/xvdh /backups/",
+      "echo '/dev/xvdh /backups ext4 defaults,nofail 0 0' | sudo tee -a /etc/fstab"
+    ]
+  
+  }
 }
 
 resource "aws_ebs_volume" "backup-volume" {
@@ -77,24 +94,6 @@ resource "aws_instance" "redmine-app" {
   instance_type = "t2.micro"
   security_groups = [ "redmine-sg" ]
   key_name = "conjunto"
-
-  connection {
-    type = "ssh"
-    user        = "ubuntu"
-    private_key = file("./conjunto.pem")
-    host = aws_instance.redmine-app.public_ip
-  } 
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo su",
-      "mkfs -t ext4 /dev/sdh",
-      "mkdir /backups",
-      "mount /dev/sdh /backups/",
-      "echo \"/dev/sdh /backups ext4 defaults,nofail 0 0\" >> /etc/fstab"
-    ]
-  
-  }
 
   provisioner "local-exec" {
     command = "sleep 120; ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ubuntu --private-key ./conjunto.pem -i '${aws_instance.redmine-app.public_ip},' ../playbook.yml --extra-vars \"run_mariadb=${var.use_rds != "true"} mariadb_root_password=${var.root_user_password} mariadb_redmine_password=${var.redmine_user_password} mariadb_host=${var.use_rds == "true" ? aws_db_instance.redmine-db[0].address : var.localhost}\" "
