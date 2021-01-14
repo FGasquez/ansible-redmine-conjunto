@@ -1,0 +1,9 @@
+---
+- name: Restore Files
+  hosts: all
+  vars:
+    time: "now"
+  tasks:
+  - name: Restore files with rdiff
+    become: yes
+    shell: rdiff-backup -r {{ time }} /backups/redmine /var/www/redmine/files
