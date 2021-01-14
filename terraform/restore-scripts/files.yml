@@ -6,4 +6,4 @@
   tasks:
   - name: Restore files with rdiff
     become: yes
-    shell: rdiff-backup -r {{ time }} /backups/redmine /var/www/redmine/files
+    shell: rdiff-backup --force -r {{ time }} /backups/redmine /var/www/redmine/files 
