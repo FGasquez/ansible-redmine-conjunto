@@ -16,3 +16,13 @@
     user: root
     job: "rdiff-backup {{ redmine_project_dir }}/redmine/files /backups/redmine >/dev/null 2>&1"
     cron_file: ansible_rdiff-backup
+
+- name: Add remove older incrementales cron job
+  become: yes
+  ansible.builtin.cron:
+    name: "remove old incrementals"
+    minute: "0"
+    hour: "*/6"
+    user: root
+    job: "rdiff-backup –force –remove-older-than 1M /backups/redmine >/dev/null 2>&1"
+    cron_file: ansible_rdiff-clean
