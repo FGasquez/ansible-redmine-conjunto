@@ -32,6 +32,11 @@ variable "redmine_user_password" {
   default = "ChangeMe12345"
 }
 
+variable "backup_snapshot" {
+  type    = string
+  default = null
+}
+
 variable "backup_retention_period" {
   type    = number
   default = 30
@@ -61,7 +66,9 @@ resource "aws_db_instance" "redmine-db" {
   maintenance_window   = var.maintenance_window
   backup_window        = var.backup_window
   backup_retention_period = var.backup_retention_period
+  snapshot_identifier = var.backup_snapshot
   skip_final_snapshot = true
+  
   
   tags =  {
     Environment = "Production"
