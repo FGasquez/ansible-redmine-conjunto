@@ -25,11 +25,13 @@ variable "localhost"{
 variable "root_user_password" {
   type    = string
   default = "ChangeMe12345"
+  sensitive = true
 }
 
 variable "redmine_user_password" {
   type    = string
   default = "ChangeMe12345"
+  sensitive = true
 }
 
 variable "backup_snapshot" {
