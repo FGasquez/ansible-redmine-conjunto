@@ -31,10 +31,12 @@ variable "redmine_user_password" {
   type    = string
   default = "ChangeMe12345"
 }
+
 variable "backup_retention_period" {
   type    = number
   default = 30
 }
+
 variable "backup_window" {
   type    = string
   default = "00:01-23:30"
@@ -44,6 +46,7 @@ variable "maintenance_window" {
   type    = string
   default = "Mon:23:31-Tue:00:01"
 }
+
 resource "aws_db_instance" "redmine-db" {
   count = var.use_rds == "true" ? 1 : 0
   
@@ -59,6 +62,11 @@ resource "aws_db_instance" "redmine-db" {
   backup_window        = var.backup_window
   backup_retention_period = var.backup_retention_period
   skip_final_snapshot = true
+  
+  tags =  {
+    Environment = "Production"
+    Application = "Redmine"
+  }
 }
 
 resource "aws_volume_attachment" "backup-volume-attachment" {
@@ -87,6 +95,11 @@ resource "aws_volume_attachment" "backup-volume-attachment" {
 resource "aws_ebs_volume" "backup-volume" {
   availability_zone = aws_instance.redmine-app.availability_zone
   size              = 5
+  
+  tags =  {
+    Environment = "Production"
+    Application = "Redmine"
+  }
 }
 
 resource "aws_instance" "redmine-app" {
@@ -98,7 +111,36 @@ resource "aws_instance" "redmine-app" {
   provisioner "local-exec" {
     command = "sleep 120; ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u ubuntu --private-key ./conjunto.pem -i '${aws_instance.redmine-app.public_ip},' ../playbook.yml --extra-vars \"run_mariadb=${var.use_rds != "true"} mariadb_root_password=${var.root_user_password} mariadb_redmine_password=${var.redmine_user_password} mariadb_host=${var.use_rds == "true" ? aws_db_instance.redmine-db[0].address : var.localhost}\" "
     }
+    
+  tags =  {
+    Environment = "Production"
+    Application = "Redmine"
+  }
    
+}
+
+resource "aws_resourcegroups_group" "redmine-group-prd" {
+  name = "redmine-production"
+
+  resource_query {
+    query = <<JSON
+    {
+      "ResourceTypeFilters": [
+        "AWS::AllSupported"
+      ],
+      "TagFilters": [
+        {
+          "Key": "Environment",
+          "Values": ["Production"]
+        },
+        {
+          "Key": "Application",
+          "Values": ["Redmine"]
+        }    
+      ]
+    }
+    JSON
+  }
 }
 
 output "redmine-ip" {
