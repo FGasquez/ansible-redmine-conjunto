@@ -1,0 +1,18 @@
+---
+- name: Provision redmine to hosts
+  hosts: all
+  vars:
+    database_host: ""
+  tasks:
+  - name: Change host in database
+    lineinfile: 
+      path: /var/www/redmine/config/databases.yml
+      regexp: '^(.*)host:(.*)$' 
+      line: 'host: {{ database_host }}'
+      backrefs: yes
+
+  - name: Restart puma
+    become: yes
+    service:
+      name: puma
+      state: restarted
