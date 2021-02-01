@@ -25,16 +25,19 @@ variable "localhost"{
 variable "root_user_password" {
   type    = string
   default = "ChangeMe12345"
-  sensitive = true
 }
 
 variable "redmine_user_password" {
   type    = string
   default = "ChangeMe12345"
-  sensitive = true
 }
 
 variable "backup_snapshot" {
+  type    = string
+  default = null
+}
+
+variable "disk_snapshot" {
   type    = string
   default = null
 }
@@ -69,7 +72,6 @@ resource "aws_db_instance" "redmine-db" {
   backup_window        = var.backup_window
   backup_retention_period = var.backup_retention_period
   snapshot_identifier = var.backup_snapshot
-  skip_final_snapshot = true
   
   
   tags =  {
@@ -92,7 +94,6 @@ resource "aws_volume_attachment" "backup-volume-attachment" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo mkfs -t ext4 /dev/xvdh",
       "sudo mkdir /backups",
       "sudo mount /dev/xvdh /backups/",
       "echo '/dev/xvdh /backups ext4 defaults,nofail 0 0' | sudo tee -a /etc/fstab"
@@ -104,6 +105,8 @@ resource "aws_volume_attachment" "backup-volume-attachment" {
 resource "aws_ebs_volume" "backup-volume" {
   availability_zone = aws_instance.redmine-app.availability_zone
   size              = 5
+  snapshot_id = var.disk_snapshot
+  
   
   tags =  {
     Environment = "Production"
@@ -126,30 +129,6 @@ resource "aws_instance" "redmine-app" {
     Application = "Redmine"
   }
    
-}
-
-resource "aws_resourcegroups_group" "redmine-group-prd" {
-  name = "redmine-production"
-
-  resource_query {
-    query = <<JSON
-    {
-      "ResourceTypeFilters": [
-        "AWS::AllSupported"
-      ],
-      "TagFilters": [
-        {
-          "Key": "Environment",
-          "Values": ["Production"]
-        },
-        {
-          "Key": "Application",
-          "Values": ["Redmine"]
-        }    
-      ]
-    }
-    JSON
-  }
 }
 
 output "redmine-ip" {
