@@ -49,7 +49,7 @@ variable "backup_retention_period" {
 
 variable "backup_window" {
   type    = string
-  default = "00:01-23:30"
+  default = "00:01-03:30"
 }
 
 variable "maintenance_window" {
