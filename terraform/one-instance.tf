@@ -72,6 +72,8 @@ resource "aws_db_instance" "redmine-db" {
   backup_window        = var.backup_window
   backup_retention_period = var.backup_retention_period
   snapshot_identifier = var.backup_snapshot
+  skip_final_snapshot  = true
+  
   
   
   tags =  {
